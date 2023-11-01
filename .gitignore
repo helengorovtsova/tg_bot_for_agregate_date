@@ -1,0 +1,6 @@
+.env
+
+.mypy_cache/
+.vscode/
+tb_bot_agregation_venv/
+__pycache__/
