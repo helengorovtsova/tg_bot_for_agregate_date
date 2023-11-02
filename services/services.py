@@ -1,4 +1,3 @@
-from database.database import collection
 from models.models import Salary
 from datetime import timedelta
 
@@ -45,6 +44,7 @@ def get_data_per_day(dt_from, dt_upto):
 
     result_dict = {}
 
+    # create labels for all days of the month
     all_days = [dt_from + timedelta(days=i) for i in range((dt_upto - dt_from).days + 1)]
     labels = [day.strftime("%Y-%m-%dT00:00:00") for day in all_days]
 
@@ -71,8 +71,18 @@ def get_data_per_day(dt_from, dt_upto):
         ]
     )
 
-    total_value_dict = {(doc["_id"]["year"], doc["_id"]["month"], doc["_id"]["day"]): doc["total_value"] for doc in list(result)}
-    dataset = [total_value_dict.get((date.year, date.month, date.day), 0) for date in all_days]
+    # create a dictionary with the total value for each day
+    total_value_dict = {
+        (doc["_id"]["year"], doc["_id"]["month"], doc["_id"]["day"]):
+            doc["total_value"] for doc in list(result)
+    }
+
+    # adding existing data and empty values for days that are not in the database
+    dataset = [
+        total_value_dict.get((date.year, date.month, date.day), 0) 
+            for date in all_days
+    ]
+
     result_dict["dataset"] = dataset
     result_dict["labels"] = labels
     
@@ -111,8 +121,16 @@ def get_data_per_hour(dt_from, dt_upto):
         ]
     )
 
-    total_value_dict = {(doc["_id"]["year"], doc["_id"]["month"], doc["_id"]["day"], doc["_id"]["hour"]): doc["total_value"] for doc in list(result)}
-    dataset = [total_value_dict.get((date.year, date.month, date.day, date.hour), 0) for date in all_hours]
+    total_value_dict = {
+        (doc["_id"]["year"], doc["_id"]["month"], doc["_id"]["day"], doc["_id"]["hour"]): 
+            doc["total_value"] for doc in list(result)
+    }
+
+    dataset = [
+        total_value_dict.get((date.year, date.month, date.day, date.hour), 0) 
+            for date in all_hours
+    ]
+
     result_dict["dataset"] = dataset
     result_dict["labels"] = labels
     return result_dict

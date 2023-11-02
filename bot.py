@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 
 async def main():
 
+    # logging setup
     logging.basicConfig(
         level=logging.INFO, 
         format='%(filename)s:%(lineno)d #%(levelname)-8s '
@@ -15,8 +16,6 @@ async def main():
     )
 
     logging.info('Starting bot')
-
-    
 
     config: Config = load_config()
 

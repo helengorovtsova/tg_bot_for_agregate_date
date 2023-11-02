@@ -19,6 +19,7 @@ async def process_start_command(message: Message):
     )
 
 
+# handler that accepts the start date and end date of the group and the group type
 @router.message()
 async def echo(message: Message):
     data = loads(message.text)
