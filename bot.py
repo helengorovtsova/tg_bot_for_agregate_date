@@ -17,6 +17,8 @@ async def main():
 
     logging.info('Starting bot')
 
+
+
     config: Config = load_config()
 
     bot = Bot(token=config.bot.token, parse_mode='HTML')
