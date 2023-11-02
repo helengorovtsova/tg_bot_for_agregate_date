@@ -89,11 +89,14 @@ def get_data_per_day(dt_from, dt_upto):
 def get_data_per_hour(dt_from, dt_upto):
     # Get aggregated data by hours.
     result_dict = {}
-
+    print("DT FROM", dt_from)
+    print("DT UPTO", dt_upto)
+    print("DT UPTO - DT FROM", (dt_upto - dt_from).days)
     all_hours = [
         dt_from + timedelta(hours=i) 
-            for i in range((dt_upto - dt_from).days * 24 + 1)
+            for i in range(int((dt_upto - dt_from).total_seconds() / 3600) + 1)
     ]
+    print("ALL HOURS", all_hours)
 
     labels = [hour.strftime("%Y-%m-%dT%H:00:00") for hour in all_hours]
 
@@ -122,14 +125,19 @@ def get_data_per_hour(dt_from, dt_upto):
         ]
     )
 
+
     total_value_dict = {
         (doc["_id"]["year"], doc["_id"]["month"], doc["_id"]["day"], doc["_id"]["hour"]): 
             doc["total_value"] for doc in list(result)
     }
+
+
+    
     dataset = [
         total_value_dict.get((date.year, date.month, date.day, date.hour), 0) 
             for date in all_hours
     ]
+    print(dataset)
     result_dict["dataset"] = dataset
     result_dict["labels"] = labels
     
