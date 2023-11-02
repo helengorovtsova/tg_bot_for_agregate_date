@@ -1,9 +1,9 @@
 from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import CommandStart
-from json import loads
+from json import loads, dumps
 from datetime import datetime
-from services.services import get_agregated_data
+from services.services import get_data_by_group
 
 router = Router()
 
@@ -22,10 +22,10 @@ async def process_start_command(message: Message):
 @router.message()
 async def echo(message: Message):
     data = loads(message.text)
-    print(data)
 
     dt_from = datetime.strptime(data["dt_from"], '%Y-%m-%dT%H:%M:%S')
     dt_upto = datetime.strptime(data["dt_upto"], '%Y-%m-%dT%H:%M:%S')
     group_type = data['group_type']
 
-    await get_agregated_data(dt_from, dt_upto, group_type)
+    answer = get_data_by_group(dt_from, dt_upto, group_type)
+    await message.answer(dumps(answer))
